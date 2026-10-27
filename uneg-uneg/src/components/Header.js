@@ -11,7 +11,7 @@ export function mountHeader(root, { onTabChange, onThemeToggle }) {
     <div class="site-header__inner">
       <a class="logo logo--3d" href="/" aria-label="Uneg-Uneg, beranda">
         <span class="logo__mark-3d" aria-hidden="true">
-          <span class="logo__icon">${icons.mask(22)}</span>
+          <img class="logo__img" src="/logo.png" alt="Logo Uneg-Uneg" />
         </span>
         <div class="logo__text-group">
           <span class="logo__word" data-text="uneg-uneg">uneg-uneg</span>

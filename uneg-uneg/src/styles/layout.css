@@ -79,6 +79,20 @@
   transform: translateZ(10px) scale(1.06);
 }
 
+.logo__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 11px;
+  transform: translateZ(6px);
+  transition: transform 0.2s ease;
+  display: block;
+}
+
+.logo:hover .logo__img {
+  transform: translateZ(10px) scale(1.08);
+}
+
 /* 3D Word Group */
 .logo__text-group {
   position: relative;
