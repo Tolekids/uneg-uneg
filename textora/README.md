@@ -1,4 +1,4 @@
-# Textora
+# UNEG-UNEG
 
 Microblogging anonim berbasis teks. Baca tanpa akun; untuk memposting cukup selesaikan verifikasi Cloudflare Turnstile.
 Stack: Vite (JavaScript) · Supabase (PostgreSQL + Edge Functions) · Cloudflare Turnstile · Netlify.
