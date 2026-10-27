@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Textora: microblogging anonim berbasis teks. Baca tanpa akun, posting dengan satu verifikasi singkat." />
+    <title>Textora — tulis apa saja, tanpa nama</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&display=swap" rel="stylesheet" />
+    <script src="/theme-init.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#feed">Lewati ke feed</a>
+    <header id="app-header" class="site-header"></header>
+
+    <main class="shell">
+      <div id="setup-notice"></div>
+      <section id="composer" aria-label="Tulis postingan"></section>
+      <section id="feed" aria-label="Feed postingan"></section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Postingan bersifat publik dan permanen. Textora tidak meminta identitasmu, tetapi penyedia hosting dan layanan pendukung dapat memproses data teknis seperti alamat IP.</p>
+    </footer>
+
+    <dialog id="report-dialog" class="dialog" aria-labelledby="report-title"></dialog>
+    <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

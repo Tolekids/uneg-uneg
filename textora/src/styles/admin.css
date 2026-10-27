@@ -1,0 +1,34 @@
+.admin-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.admin-bar h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; margin-right: auto; }
+.admin-bar small { color: var(--muted); }
+
+.login {
+  display: grid;
+  gap: 14px;
+  max-width: 400px;
+  margin: 8vh auto 0;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+.login h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+.login p { color: var(--muted); font-size: 0.9375rem; }
+
+.mod-list { display: grid; gap: 12px; }
+.mod-item {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.mod-item__text { font-family: var(--font-text); font-size: 1.125rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.mod-item__meta { display: flex; flex-wrap: wrap; gap: 8px 14px; color: var(--muted); font-size: 0.875rem; }
+.mod-item__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { padding: 1px 10px; border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--ink); font-weight: 600; font-size: 0.8125rem; }
+.badge--hidden { background: var(--danger); color: #fff; }
+:root[data-theme='dark'] .badge--hidden { color: #2a0610; }
+.mod-empty { padding: 32px; text-align: center; color: var(--muted); }

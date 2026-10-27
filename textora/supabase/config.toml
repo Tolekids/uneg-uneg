@@ -1,0 +1,15 @@
+project_id = "textora"
+
+# Fungsi ini dipanggil publik dengan publishable key (bukan JWT pengguna),
+# jadi verifikasi JWT dimatikan. Perlindungan ada di Turnstile + rate limit server.
+[functions.create-post]
+verify_jwt = false
+
+[functions.toggle-like]
+verify_jwt = false
+
+[functions.my-likes]
+verify_jwt = false
+
+[functions.report-post]
+verify_jwt = false
