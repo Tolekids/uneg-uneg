@@ -9,9 +9,13 @@ const TABS = [
 export function mountHeader(root, { onTabChange, onThemeToggle }) {
   root.innerHTML = `
     <div class="site-header__inner">
-      <a class="logo" href="/" aria-label="Textora, beranda">
-        <span class="logo__mark">${icons.mask(22)}</span>
-        <span class="logo__word">Textora</span>
+      <a class="logo logo--3d" href="/" aria-label="Uneg-Uneg, beranda">
+        <span class="logo__mark-3d" aria-hidden="true">
+          <span class="logo__icon">${icons.mask(22)}</span>
+        </span>
+        <div class="logo__text-group">
+          <span class="logo__word" data-text="uneg-uneg">uneg-uneg</span>
+        </div>
       </a>
       <nav class="tabs" aria-label="Urutan feed"></nav>
       <button class="icon-button" type="button" data-theme-toggle></button>
@@ -19,6 +23,36 @@ export function mountHeader(root, { onTabChange, onThemeToggle }) {
 
   const nav = root.querySelector('.tabs');
   const themeButton = root.querySelector('[data-theme-toggle]');
+  const logo = root.querySelector('.logo--3d');
+
+  // Interactive 3D tilt tracking for cursor
+  if (logo) {
+    let bounds;
+    const handleMouseEnter = () => {
+      bounds = logo.getBoundingClientRect();
+    };
+    const handleMouseMove = (e) => {
+      if (!bounds) bounds = logo.getBoundingClientRect();
+      const mouseX = e.clientX - bounds.left;
+      const mouseY = e.clientY - bounds.top;
+      const xPct = (mouseX / bounds.width - 0.5) * 2;
+      const yPct = (mouseY / bounds.height - 0.5) * 2;
+      
+      const rotX = -yPct * 12;
+      const rotY = xPct * 16;
+      logo.style.setProperty('--rot-x', `${rotX.toFixed(2)}deg`);
+      logo.style.setProperty('--rot-y', `${rotY.toFixed(2)}deg`);
+    };
+    const handleMouseLeave = () => {
+      logo.style.removeProperty('--rot-x');
+      logo.style.removeProperty('--rot-y');
+      bounds = null;
+    };
+
+    logo.addEventListener('mouseenter', handleMouseEnter);
+    logo.addEventListener('mousemove', handleMouseMove);
+    logo.addEventListener('mouseleave', handleMouseLeave);
+  }
 
   for (const tab of TABS) {
     const button = document.createElement('button');

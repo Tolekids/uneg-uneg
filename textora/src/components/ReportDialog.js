@@ -49,7 +49,7 @@ export function mountReportDialog(dialog) {
     try {
       await reportPost(postId, data.get('reason'), String(data.get('details') ?? '').trim());
       dialog.close();
-      showToast('Laporan terkirim. Terima kasih sudah membantu menjaga Textora.', 'success');
+      showToast('Laporan terkirim. Terima kasih sudah membantu menjaga Uneg-Uneg.', 'success');
     } catch (err) {
       errorBox.textContent = err.message;
       errorBox.hidden = false;

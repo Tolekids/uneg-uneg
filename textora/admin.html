@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Moderasi — Textora</title>
+    <title>Moderasi — Uneg-Uneg</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +13,12 @@
     <script src="/theme-init.js"></script>
   </head>
   <body>
+    <!-- Ambient glowing orbs for glassmorphism backdrop -->
+    <div class="glass-ambient-bg" aria-hidden="true">
+      <div class="glass-ambient-blob glass-ambient-blob--1"></div>
+      <div class="glass-ambient-blob glass-ambient-blob--2"></div>
+      <div class="glass-ambient-blob glass-ambient-blob--3"></div>
+    </div>
     <main class="shell shell--admin" id="admin-root"></main>
     <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
     <script type="module" src="/src/admin.js"></script>

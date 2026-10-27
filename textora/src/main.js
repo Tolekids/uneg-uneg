@@ -21,7 +21,7 @@ function showSetupNotice(missing) {
   const notice = document.createElement('div');
   notice.className = 'notice';
   notice.setAttribute('role', 'alert');
-  notice.append('Textora belum selesai dikonfigurasi. Isi ');
+  notice.append('Uneg-Uneg belum selesai dikonfigurasi. Isi ');
   missing.forEach((name, i) => {
     const code = document.createElement('code');
     code.textContent = name;

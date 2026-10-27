@@ -2,38 +2,67 @@
   --font-ui: 'Bricolage Grotesque', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-text: 'Newsreader', Georgia, 'Times New Roman', serif;
 
-  --bg: #e9edf5;
-  --surface: #f8fafd;
-  --surface-2: #eef2fa;
-  --ink: #161b2e;
-  --muted: #59627e;
-  --line: #d3d9e7;
+  --bg: #ebf0f9;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-hover: rgba(255, 255, 255, 0.88);
+  --surface-2: rgba(235, 241, 253, 0.65);
+  --surface-solid: rgba(255, 255, 255, 0.9);
+  --surface-overlay: rgba(255, 255, 255, 0.82);
+
+  --ink: #111628;
+  --muted: #535e7d;
+  --line: rgba(205, 215, 235, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border-subtle: rgba(255, 255, 255, 0.35);
+  --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+  --glass-glow: 0 8px 32px 0 rgba(47, 70, 229, 0.08);
+
   --accent: #2f46e5;
+  --accent-hover: #2638c4;
   --accent-ink: #ffffff;
-  --accent-soft: #dde2ff;
+  --accent-soft: rgba(47, 70, 229, 0.1);
+  --accent-glow: rgba(47, 70, 229, 0.3);
   --danger: #b3263f;
-  --ok: #1b7a4b;
+  --ok: #167a49;
 
   --radius-lg: 20px;
   --radius-md: 12px;
   --radius-pill: 999px;
-  --shadow: 0 1px 0 rgba(22, 27, 46, 0.04), 0 14px 34px -20px rgba(22, 27, 46, 0.4);
+
+  --glass-blur: 16px;
+  --glass-saturate: 180%;
+
+  --shadow: 0 4px 20px -2px rgba(22, 27, 46, 0.06), 0 1px 3px 0 rgba(22, 27, 46, 0.04);
+  --shadow-lg: 0 14px 44px -6px rgba(22, 27, 46, 0.12), 0 4px 12px -2px rgba(22, 27, 46, 0.06);
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #0c1020;
-  --surface: #131931;
-  --surface-2: #1a2140;
-  --ink: #e7eaf6;
-  --muted: #98a0bf;
-  --line: #252d4b;
+  --bg: #090d1a;
+  --surface: rgba(16, 22, 42, 0.65);
+  --surface-hover: rgba(24, 33, 62, 0.78);
+  --surface-2: rgba(22, 29, 56, 0.55);
+  --surface-solid: rgba(16, 22, 42, 0.88);
+  --surface-overlay: rgba(16, 22, 42, 0.82);
+
+  --ink: #e8ecf8;
+  --muted: #959ebd;
+  --line: rgba(45, 54, 88, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-subtle: rgba(255, 255, 255, 0.06);
+  --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
   --accent: #8c9bff;
+  --accent-hover: #a3afff;
   --accent-ink: #0c1020;
-  --accent-soft: #1e2650;
+  --accent-soft: rgba(140, 155, 255, 0.15);
+  --accent-glow: rgba(140, 155, 255, 0.35);
   --danger: #ff8196;
   --ok: #5fd39a;
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 14px 34px -20px rgba(0, 0, 0, 0.8);
+
+  --shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 16px 48px -8px rgba(0, 0, 0, 0.7), 0 6px 16px -2px rgba(0, 0, 0, 0.4);
   color-scheme: dark;
 }
 
@@ -44,12 +73,90 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: 1rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient dynamic glowing orbs for backdrop glass blur */
+.glass-ambient-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.glass-ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(85px);
+  will-change: transform;
+}
+
+.glass-ambient-blob--1 {
+  top: -8%;
+  left: 15%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(120, 119, 255, 0.38) 0%, rgba(99, 102, 241, 0.08) 70%, transparent 100%);
+  animation: floatOrb1 18s ease-in-out infinite alternate;
+}
+
+.glass-ambient-blob--2 {
+  top: 40%;
+  right: 5%;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.32) 0%, rgba(147, 51, 234, 0.1) 70%, transparent 100%);
+  animation: floatOrb2 22s ease-in-out infinite alternate;
+}
+
+.glass-ambient-blob--3 {
+  bottom: 5%;
+  left: 8%;
+  width: 440px;
+  height: 440px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.22) 0%, rgba(139, 92, 246, 0.06) 70%, transparent 100%);
+  animation: floatOrb3 20s ease-in-out infinite alternate;
+}
+
+:root[data-theme='dark'] .glass-ambient-blob--1 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.32) 0%, rgba(79, 70, 229, 0.06) 70%, transparent 100%);
+}
+
+:root[data-theme='dark'] .glass-ambient-blob--2 {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.26) 0%, rgba(168, 85, 247, 0.1) 70%, transparent 100%);
+}
+
+:root[data-theme='dark'] .glass-ambient-blob--3 {
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.2) 0%, rgba(99, 102, 241, 0.06) 70%, transparent 100%);
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 35px) scale(1.08); }
+  100% { transform: translate(-35px, 70px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-70px, -40px) scale(1.1); }
+  100% { transform: translate(35px, -25px) scale(0.92); }
+}
+
+@keyframes floatOrb3 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(45px, -50px) scale(1.06); }
+  100% { transform: translate(-40px, -25px) scale(0.94); }
 }
 
 h1, h2, h3, p { margin: 0; }
@@ -58,7 +165,7 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -81,6 +188,8 @@ button:disabled { cursor: not-allowed; }
   color: var(--accent-ink);
   border-radius: var(--radius-md);
   text-decoration: none;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
 }
 .skip-link:focus { top: 12px; }
 
@@ -89,5 +198,8 @@ button:disabled { cursor: not-allowed; }
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .glass-ambient-blob {
+    animation: none !important;
   }
 }

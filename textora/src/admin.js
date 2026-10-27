@@ -31,7 +31,7 @@ function renderLogin(message = '') {
   const submit = h('button', { class: 'button button--primary', type: 'submit' }, 'Masuk');
 
   const form = h('form', { class: 'login', novalidate: true },
-    h('h1', {}, 'Moderasi Textora'),
+    h('h1', {}, 'Moderasi Uneg-Uneg'),
     h('p', {}, 'Khusus moderator. Akun dibuat oleh pemilik proyek di Supabase Auth.'),
     h('label', { class: 'field' }, h('span', {}, 'Email'), email),
     h('label', { class: 'field' }, h('span', {}, 'Kata sandi'), password),
@@ -188,7 +188,7 @@ function renderDashboard(user) {
 
   root.replaceChildren(
     h('div', { class: 'admin-bar' },
-      h('h1', {}, 'Moderasi Textora'),
+      h('h1', {}, 'Moderasi Uneg-Uneg'),
       h('small', {}, user.email),
       signOut,
     ),

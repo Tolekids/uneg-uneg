@@ -1,8 +1,8 @@
 {
-  "name": "textora",
+  "name": "uneg-uneg",
   "private": true,
   "version": "1.0.0",
-  "description": "Textora — microblogging anonim berbasis teks",
+  "description": "Uneg-Uneg — curahan hati dan microblogging anonim berbasis teks",
   "type": "module",
   "scripts": {
     "dev": "vite",

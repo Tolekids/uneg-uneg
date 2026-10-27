@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="description" content="Textora: microblogging anonim berbasis teks. Baca tanpa akun, posting dengan satu verifikasi singkat." />
-    <title>Textora — tulis apa saja, tanpa nama</title>
+    <meta name="description" content="Uneg-Uneg: ruang berbagi dan luapan pikiran anonim berbasis teks. Baca tanpa akun, posting dengan satu verifikasi singkat." />
+    <title>Uneg-Uneg — luapkan tanpa nama</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +13,13 @@
     <script src="/theme-init.js"></script>
   </head>
   <body>
+    <!-- Ambient glowing orbs for glassmorphism backdrop -->
+    <div class="glass-ambient-bg" aria-hidden="true">
+      <div class="glass-ambient-blob glass-ambient-blob--1"></div>
+      <div class="glass-ambient-blob glass-ambient-blob--2"></div>
+      <div class="glass-ambient-blob glass-ambient-blob--3"></div>
+    </div>
+
     <a class="skip-link" href="#feed">Lewati ke feed</a>
     <header id="app-header" class="site-header"></header>
 
@@ -23,7 +30,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>Postingan bersifat publik dan permanen. Textora tidak meminta identitasmu, tetapi penyedia hosting dan layanan pendukung dapat memproses data teknis seperti alamat IP.</p>
+      <p>Postingan bersifat publik dan permanen. Uneg-Uneg tidak meminta identitasmu, tetapi penyedia hosting dan layanan pendukung dapat memproses data teknis seperti alamat IP.</p>
     </footer>
 
     <dialog id="report-dialog" class="dialog" aria-labelledby="report-title"></dialog>
