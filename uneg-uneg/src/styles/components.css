@@ -299,9 +299,129 @@
   color: var(--accent);
   background: var(--accent-soft);
 }
+.action--comment.is-active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
 .action--like.is-pending { opacity: 0.6; }
 .action--report { margin-left: auto; }
 .action__count { font-variant-numeric: tabular-nums; min-width: 1ch; }
+
+/* ---------- Comments Section ---------- */
+.post__comments {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: commentsFadeIn 0.22s ease-out;
+}
+
+@keyframes commentsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comments__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.comment {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--glass-border);
+  font-size: 0.925rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.comment__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.comment__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.comment__sep {
+  opacity: 0.5;
+}
+
+.comment__time {
+  font-variant-numeric: tabular-nums;
+}
+
+.comment__text {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.comments__empty,
+.comments__loading {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-style: italic;
+  padding: 4px 2px;
+}
+
+.comments__form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.comments__input {
+  flex: 1;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.comments__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.comments__submit {
+  min-height: 38px;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
 
 /* ---------- Dialog Glass Modal ---------- */
 .dialog {

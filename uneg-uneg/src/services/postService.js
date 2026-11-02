@@ -115,3 +115,38 @@ export async function reportPost(postId, reason, details) {
   }
   return { ok: true };
 }
+
+export async function fetchComments(postId) {
+  const { data, error } = await supabase
+    .from('comments')
+    .select('id, post_id, content, author_label, created_at')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    // Jika tabel comments belum dibuat, kembalikan array kosong agar UI tidak crash
+    return [];
+  }
+  return data ?? [];
+}
+
+export async function createComment(postId, content) {
+  const trimmed = String(content ?? '').trim();
+  if (!trimmed) throw new ServiceError('empty_comment', 'Komentar tidak boleh kosong.');
+  if (trimmed.length > 280) throw new ServiceError('comment_too_long', 'Komentar maksimal 280 karakter.');
+
+  const { data, error } = await supabase
+    .from('comments')
+    .insert({
+      post_id: postId,
+      content: trimmed,
+      author_label: 'Anonim',
+    })
+    .select('id, post_id, content, author_label, created_at')
+    .single();
+
+  if (error) {
+    throw new ServiceError('create_comment_failed', error.message || 'Gagal mengirim komentar. Pastikan tabel comments sudah dibuat.');
+  }
+  return data;
+}
