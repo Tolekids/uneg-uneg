@@ -32,3 +32,34 @@ create policy "publik membuat komentar"
     author_label = 'Anonim'
     and char_length(content) between 1 and 280
   );
+
+-- Tambahkan kolom comment_count pada tabel posts jika belum ada
+alter table public.posts add column if not exists comment_count integer not null default 0;
+
+-- Trigger sinkronisasi comment_count otomatis
+create or replace function public.sync_comment_count()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'INSERT' then
+    update public.posts set comment_count = comment_count + 1 where id = new.post_id;
+  elsif tg_op = 'DELETE' then
+    update public.posts set comment_count = greatest(comment_count - 1, 0) where id = old.post_id;
+  end if;
+  return null;
+end;
+$$;
+
+drop trigger if exists comments_sync_count on public.comments;
+create trigger comments_sync_count
+after insert or delete on public.comments
+for each row execute function public.sync_comment_count();
+
+-- Sinkronisasi comment_count dari data yang sudah ada
+update public.posts p
+set comment_count = (
+  select count(*) from public.comments c where c.post_id = p.id
+);

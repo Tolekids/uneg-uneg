@@ -3,7 +3,7 @@ import { icons } from '../utils/icons.js';
 import { fetchComments, createComment } from '../services/postService.js';
 import { showToast } from './Toast.js';
 
-export function createPostCard({ onLike, onReport }) {
+export function createPostCard({ onLike, onReport, onCommentAdded }) {
   const el = document.createElement('article');
   el.className = 'post';
   el.innerHTML = `
@@ -15,7 +15,7 @@ export function createPostCard({ onLike, onReport }) {
     <footer class="post__actions">
       <button class="action action--like" type="button" data-like></button>
       <button class="action action--comment" type="button" data-comment aria-expanded="false">
-        ${icons.comment(16)}<span>Komentar</span><span class="action__count" data-comment-count></span>
+        ${icons.comment(18)}<span class="action__count" data-comment-count>0</span>
       </button>
       <button class="action action--report" type="button" data-report>${icons.flag()}<span>Laporkan</span></button>
     </footer>
@@ -65,27 +65,30 @@ export function createPostCard({ onLike, onReport }) {
     }
     if (comments.length === 0) {
       commentsList.innerHTML = `<p class="comments__empty">Belum ada komentar. Jadilah yang pertama!</p>`;
-      commentCountEl.textContent = '';
-      return;
+    } else {
+      commentsList.innerHTML = '';
+      for (const c of comments) {
+        const item = document.createElement('div');
+        item.className = 'comment';
+        const cTime = formatTime(c.created_at);
+        const cTimeAbs = formatAbsolute(c.created_at);
+        item.innerHTML = `
+          <div class="comment__meta">
+            <span class="comment__author"><span class="post__mask">${icons.mask(13)}</span>Anonim</span>
+            <span class="comment__sep">•</span>
+            <time class="comment__time" title="${cTimeAbs}">${cTime}</time>
+          </div>
+          <div class="comment__text"></div>
+        `;
+        item.querySelector('.comment__text').textContent = c.content;
+        commentsList.appendChild(item);
+      }
     }
-    commentCountEl.textContent = comments.length > 0 ? comments.length : '';
-    commentsList.innerHTML = '';
-    for (const c of comments) {
-      const item = document.createElement('div');
-      item.className = 'comment';
-      const cTime = formatTime(c.created_at);
-      const cTimeAbs = formatAbsolute(c.created_at);
-      item.innerHTML = `
-        <div class="comment__meta">
-          <span class="comment__author"><span class="post__mask">${icons.mask(13)}</span>Anonim</span>
-          <span class="comment__sep">•</span>
-          <time class="comment__time" title="${cTimeAbs}">${cTime}</time>
-        </div>
-        <div class="comment__text"></div>
-      `;
-      item.querySelector('.comment__text').textContent = c.content;
-      commentsList.appendChild(item);
-    }
+
+    const count = comments.length;
+    if (current) current.comment_count = count;
+    commentCountEl.textContent = count;
+    commentBtn.setAttribute('aria-label', `Komentar. ${count} komentar`);
   }
 
   async function loadComments() {
@@ -95,6 +98,7 @@ export function createPostCard({ onLike, onReport }) {
     try {
       comments = await fetchComments(current.id);
       commentsLoaded = true;
+      if (current) current.comment_count = comments.length;
     } catch {
       comments = [];
     } finally {
@@ -128,6 +132,9 @@ export function createPostCard({ onLike, onReport }) {
       const newComment = await createComment(current.id, content);
       comments.push(newComment);
       commentsLoaded = true;
+      const newCount = comments.length;
+      if (current) current.comment_count = newCount;
+      if (onCommentAdded && current) onCommentAdded(current.id, newCount);
       renderComments();
       commentInput.value = '';
       showToast('Komentar berhasil dikirim!', 'success');
@@ -149,10 +156,14 @@ export function createPostCard({ onLike, onReport }) {
     time.title = formatAbsolute(post.created_at);
 
     like.setAttribute('aria-pressed', String(liked));
-    like.setAttribute('aria-label', `${liked ? 'Batalkan suka' : 'Suka'}. ${post.like_count} suka`);
+    like.setAttribute('aria-label', `${liked ? 'Batalkan suka' : 'Suka'}. ${post.like_count ?? 0} suka`);
     like.disabled = pending;
     like.classList.toggle('is-pending', pending);
-    like.innerHTML = `${icons.heart(liked)}<span class="action__count">${post.like_count}</span>`;
+    like.innerHTML = `${icons.thumb(liked, 18)}<span class="action__count">${post.like_count ?? 0}</span>`;
+
+    const count = commentsLoaded ? comments.length : (post.comment_count ?? 0);
+    commentCountEl.textContent = count;
+    commentBtn.setAttribute('aria-label', `Komentar. ${count} komentar`);
   }
 
   return { el, update };

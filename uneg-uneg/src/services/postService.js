@@ -13,15 +13,41 @@ export class ServiceError extends Error {
 }
 
 export async function fetchPosts({ tab, offset }) {
-  let query = supabase.from('posts').select(COLUMNS).eq('status', 'published');
+  let query = supabase
+    .from('posts')
+    .select('id, content, author_label, created_at, like_count, comments(count)')
+    .eq('status', 'published');
   query = tab === 'foryou'
     ? query.order('like_count', { ascending: false }).order('created_at', { ascending: false })
     : query.order('created_at', { ascending: false });
   query = query.order('id', { ascending: false }); // pemutus seri agar urutan stabil
 
-  const { data, error } = await query.range(offset, offset + PAGE_SIZE - 1);
-  if (error) throw new ServiceError('network', 'Feed gagal dimuat. Periksa koneksimu, lalu coba lagi.');
-  return data ?? [];
+  let { data, error } = await query.range(offset, offset + PAGE_SIZE - 1);
+  if (error) {
+    // Fallback jika relasi comments belum tersedia di database
+    let fallbackQuery = supabase.from('posts').select(COLUMNS).eq('status', 'published');
+    fallbackQuery = tab === 'foryou'
+      ? fallbackQuery.order('like_count', { ascending: false }).order('created_at', { ascending: false })
+      : fallbackQuery.order('created_at', { ascending: false });
+    fallbackQuery = fallbackQuery.order('id', { ascending: false });
+
+    const fallbackRes = await fallbackQuery.range(offset, offset + PAGE_SIZE - 1);
+    if (fallbackRes.error) throw new ServiceError('network', 'Feed gagal dimuat. Periksa koneksimu, lalu coba lagi.');
+    data = fallbackRes.data;
+  }
+
+  return (data ?? []).map((post) => {
+    let commentCount = 0;
+    if (Array.isArray(post.comments) && post.comments[0] && typeof post.comments[0].count === 'number') {
+      commentCount = post.comments[0].count;
+    } else if (typeof post.comment_count === 'number') {
+      commentCount = post.comment_count;
+    }
+    return {
+      ...post,
+      comment_count: commentCount,
+    };
+  });
 }
 
 export async function createPost(content, captchaToken) {
@@ -38,7 +64,10 @@ export async function createPost(content, captchaToken) {
   if (error) {
     throw new ServiceError('insert_failed', error.message || 'Gagal mengirim postingan. Coba lagi.');
   }
-  return data;
+  return {
+    ...data,
+    comment_count: 0,
+  };
 }
 
 export async function toggleLike(postId) {

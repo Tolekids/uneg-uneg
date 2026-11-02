@@ -121,6 +121,13 @@ export function mountFeed(root, { onReport }) {
     }
   }
 
+  function handleCommentAdded(postId, newCount) {
+    const state = getState();
+    setState({
+      posts: state.posts.map((p) => (p.id === postId ? { ...p, comment_count: newCount } : p)),
+    });
+  }
+
   function render(state) {
     const hasPosts = state.posts.length > 0;
     const loading = state.status === 'loading';
@@ -143,7 +150,7 @@ export function mountFeed(root, { onReport }) {
     for (const post of state.posts) {
       let card = cards.get(post.id);
       if (!card) {
-        card = createPostCard({ onLike: handleLike, onReport });
+        card = createPostCard({ onLike: handleLike, onReport, onCommentAdded: handleCommentAdded });
         cards.set(post.id, card);
       }
       card.update(post, state.likedIds.has(post.id), pendingLikes.has(post.id));
